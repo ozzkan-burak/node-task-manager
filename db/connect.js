@@ -1,3 +1,17 @@
 const mongoose = require('mongoose');
 
-const connectionString = process.env.MONGO_DB_URI;
+
+const conncetDB = async (url) => {
+  console.log(url)
+  try {
+    await mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    console.log('MongoDB bağlantısı başarılı');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = conncetDB;
