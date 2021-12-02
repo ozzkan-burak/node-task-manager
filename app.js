@@ -2,6 +2,7 @@ const express = require('express');
 const tasks = require('./routes/tasks');
 const conncectDB = require('./db/connect');
 require('dotenv').config();
+const notFound = require('./middleware/not-found');
 
 const app = express();
 
@@ -9,12 +10,10 @@ const app = express();
 app.use(express.static('./public'));
 app.use(express.json());
 
-//router
-app.get('/', (req,res)=> {
-  res.send('Hello world');
-});
+// routes
 
 app.use('/api/v1/tasks', tasks);
+app.use(notFound);
 
 const PORT = 5001;
 const connectionString = process.env.MONGO_DB_URI;
