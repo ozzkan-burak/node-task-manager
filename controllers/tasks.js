@@ -15,14 +15,14 @@ const createTask = asyncWrapper( async (req, res) => {
     res.status(201).json({ task });s
 });
 
-const getTask = asyncWrapper( async (req, res) => {
+const getTask = asyncWrapper( async (req, res, next) => {
   
  
       const {id: taskID} = req.params;
       const task = await Task.findById({_id:taskID}); 
       
       if(!task){
-        res.status(404).json({error: `No task with id : ${taskID}`});
+        return next(`Task with id ${taskID} not found`, 404);
       }
 
       res.status(200).json({task});
@@ -30,14 +30,14 @@ const getTask = asyncWrapper( async (req, res) => {
 });
 
 
-const deleteTask = asyncWrapper ( async (req, res) => {
+const deleteTask = asyncWrapper ( async (req, res, next) => {
   
   
     const {id: taskID} = req.params;
     const task = await Task.findByIdAndDelete({_id:taskID}); 
     
     if(!task){
-      res.status(404).json({error: `No task with id : ${taskID}`});
+      return next(`Task with id ${taskID} not found`, 404);
     }
     
     res.status(200).json({task});
@@ -47,7 +47,7 @@ const deleteTask = asyncWrapper ( async (req, res) => {
   res.send('task deleted');
 });
 
-const updateTask = asyncWrapper( async (req, res) => {
+const updateTask = asyncWrapper( async (req, res, next) => {
   
     const {id: taskID} = req.params;
     //const {title, description, completed} = req.body;
@@ -55,7 +55,7 @@ const updateTask = asyncWrapper( async (req, res) => {
     res.status(200).json({task});
 
     if(!task) {
-      return res.status(404).json({error: `No task with id : ${taskID}`});
+      return next(`Task with id ${taskID} not found`, 404);
     }
   
 });
